@@ -14,6 +14,7 @@ python-dotenv>=1.0.0
 passlib[bcrypt]>=1.7.4 # Password hashing
 PyJWT>=2.8.0
 cryptography>=41.0.0
+bcrypt==4.0.1
 
 # External APIs
 googlemaps>=4.10.0

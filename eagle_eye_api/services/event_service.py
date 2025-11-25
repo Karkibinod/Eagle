@@ -33,6 +33,11 @@ def search_events(db: Session, query: str) -> list[Event]:
 
 def create_event(db: Session, title: str, start_time: datetime, end_time: datetime, location_id: int, organizer: User) -> Event:
     """Creates a new event record."""
+    # Validate that the location exists
+    location = db.query(Location).filter(Location.id == location_id).first()
+    if not location:
+        raise ValueError(f"Location with id {location_id} does not exist")
+    
     db_event = Event(
         title=title,
         start_time=start_time,

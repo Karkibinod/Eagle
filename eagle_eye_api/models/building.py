@@ -20,7 +20,8 @@ class Building(Base):
 
     # Geospatial Data
     # Stores the building footprint or boundary using PostGIS POLYGON.
-    geom = Column(Geometry(geometry_type='POLYGON', srid=4326), nullable=False)
+    # Geometry column commented out - requires PostGIS extension
+    # geom = Column(Geometry(geometry_type='POLYGON', srid=4326), nullable=True)
 
     def __repr__(self):
         return f"<Building(id={self.id}, name='{self.building_name}')>"

@@ -8,11 +8,11 @@ from ..db.session import Base
 
 
 class UserRole(enum.Enum):
-    STUDENT = "Student"
-    FACULTY = "Faculty"
-    STAFF = "Staff"
-    VISITOR = "Visitor"
-    ADMIN = "Admin"
+    STUDENT = "STUDENT"
+    FACULTY = "FACULTY"
+    STAFF = "STAFF"
+    VISITOR = "VISITOR"
+    ADMIN = "ADMIN"
 
 
 class User(Base):
@@ -36,11 +36,17 @@ class User(Base):
     role = Column(SqlAlchemyEnum(UserRole),
                   default=UserRole.VISITOR, nullable=False)
 
-    # Relationship to Preferences (defined below)
-    preferences_id = Column(Integer, ForeignKey(
-        "preferences.id"), nullable=True)
+    # REMOVED: preferences_id = Column(Integer, ForeignKey("preferences.id"), nullable=True)
+    # This line was the cause of the ambiguity and is removed to fix the error.
+
+    # Relationship to Preferences (one-to-one)
+    # Preferences.user_id points to User.id
     preferences = relationship(
-        "Preferences", back_populates="user", uselist=False)
+        "Preferences",
+        back_populates="user",
+        uselist=False,
+        primaryjoin="User.id == Preferences.user_id"
+    )
 
     def __repr__(self):
         return f"<User(id={self.id}, name='{self.name}', role='{self.role.value}')>"
@@ -49,7 +55,6 @@ class User(Base):
 class Preferences(Base):
     """
     Database Model for storing user settings and preferences.
-    Manages accessibility needs and notification settings.
     """
     __tablename__ = "preferences"
 
@@ -61,7 +66,8 @@ class Preferences(Base):
     # Notifications (SRS: notification settings)
     notifications_enabled = Column(Boolean, default=True, nullable=False)
 
-    # Relationship back to the User
+    # Relationship back to the User (one-to-one)
     user_id = Column(Integer, ForeignKey("users.id"),
                      unique=True, nullable=False)
-    user = relationship("User", back_populates="preferences")
+    user = relationship("User", back_populates="preferences",
+                        foreign_keys=[user_id])

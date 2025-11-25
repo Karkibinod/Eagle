@@ -12,7 +12,8 @@ class Route(Base):
         Integer, ForeignKey("locations.id"), nullable=False)
     end_location_id = Column(Integer, ForeignKey(
         "locations.id"), nullable=False)
-    path_geom = Column(
-        Geometry(geometry_type='LINESTRING', srid=4326), nullable=False)
+    # Geometry column commented out - requires PostGIS extension
+    # path_geom = Column(
+    #     Geometry(geometry_type='LINESTRING', srid=4326), nullable=True)
     is_accessible = Column(Boolean, default=False, nullable=False)
     weight_distance_m = Column(Integer, nullable=False)

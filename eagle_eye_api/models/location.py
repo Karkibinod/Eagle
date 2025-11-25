@@ -24,4 +24,5 @@ class Location(Base):
     floor = Column(String, nullable=True)
     type = Column(SqlAlchemyEnum(LocationType),
                   default=LocationType.OTHER, nullable=False)
-    geom = Column(Geometry(geometry_type='POINT', srid=4326), nullable=False)
+    # Geometry column commented out - requires PostGIS extension
+    # geom = Column(Geometry(geometry_type='POINT', srid=4326), nullable=True)

@@ -7,6 +7,9 @@ from .routes.emergency import emergency_router
 from .db.session import engine, Base
 from .config.settings import SECRET_KEY
 
+# Import all models to ensure SQLAlchemy relationships are resolved
+from . import models  # This imports all models via __init__.py
+
 
 def create_app():
     """Factory function to create and configure the Flask application instance."""
